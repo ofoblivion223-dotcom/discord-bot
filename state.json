@@ -1,6 +1,15 @@
 {
-    "count": 4,
-    "current_post_id": null,
-    "status": "idle",
-    "confirmed_date": null
+    "count": 5,
+    "current_post_id": 1469891122062168258,
+    "status": "gathering",
+    "confirmed_date": null,
+    "dates": [
+        "02/10(火)",
+        "02/11(水)",
+        "02/12(木)",
+        "02/13(金)",
+        "02/14(土)",
+        "02/15(日)",
+        "02/16(月)"
+    ]
 }
