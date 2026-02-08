@@ -32,7 +32,7 @@ class MyBot(discord.Client):
         now = datetime.now()
         
         # 1. 募集投稿 (日曜日 12:00〜13:00 に実行された場合、かつステータスが idle の場合)
-        if state['status'] == 'idle' and now.weekday() == 6 and now.hour >= 12:
+        if state['status'] == 'idle':
             state['count'] += 1
             dates = get_next_week_dates()
             content = f"**【零式消化{state['count']}】今週の予定を確認します**\n"
