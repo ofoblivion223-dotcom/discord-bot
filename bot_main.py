@@ -9,6 +9,7 @@ TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 CHANNEL_ID_STR = os.getenv('DISCORD_CHANNEL_ID')
 CHANNEL_ID = int(CHANNEL_ID_STR) if CHANNEL_ID_STR and CHANNEL_ID_STR.isdigit() else 0
 STATE_FILE = 'state.json'
+TARGET_CHANNEL_NAME = "零式日程調整" # ターゲットにするチャンネル名
 EMOJIS = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬"]
 
 def get_next_week_dates():
@@ -26,15 +27,26 @@ class MyBot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
         
-        # 1. 投稿先のチャンネルを特定
+        # 1. 投稿先のチャンネルを特定（または作成）
         channel = self.get_channel(CHANNEL_ID)
+        
         if not channel:
+            # IDで指定されていない場合、名前で検索する
             for guild in self.guilds:
-                channel = discord.utils.get(guild.text_channels, name="general")
-                if channel: break
+                channel = discord.utils.get(guild.text_channels, name=TARGET_CHANNEL_NAME)
+                if channel:
+                    break
+                else:
+                    # チャンネルが存在しない場合、自動作成を試みる
+                    try:
+                        channel = await guild.create_text_channel(TARGET_CHANNEL_NAME, reason="零式日程調整Bot用")
+                        print(f"Created new channel: {TARGET_CHANNEL_NAME}")
+                        break
+                    except Exception as e:
+                        print(f"Failed to create channel: {e}")
 
         if not channel:
-            print("Channel not found.")
+            print("Channel not found. 作成にも失敗しました。")
             await self.close()
             return
 
@@ -49,8 +61,9 @@ class MyBot(discord.Client):
 
         # 3. 使い方ガイドの自動投稿（初回のみ）
         if not state.get('welcomed', False):
-            welcome_msg = "## 🤖 零式日程調整君 導入完了！\n"
-            welcome_msg += "このボットは、金曜日21時に募集を自動開始し、8人揃った瞬間に日程を確定します。\n\n"
+            welcome_msg = f"## 🤖 零式日程調整君 導入完了！\n"
+            welcome_msg += f"このチャンネル「#{TARGET_CHANNEL_NAME}」で日程調整を自動化します。\n"
+            welcome_msg += "金曜日21時に募集を自動開始し、8人揃った瞬間に日程を確定します。\n\n"
             welcome_msg += "### 💡 管理者用コマンド（チャットに入力してGitHub Actionを実行）\n"
             welcome_msg += "- `!post` : 直ちに新しい募集を強制開始します。\n"
             welcome_msg += "- `!reset` : ボットの状態を初期化し、募集待機状態(idle)に戻します。\n\n"
