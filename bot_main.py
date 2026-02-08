@@ -51,7 +51,7 @@ class MyBot(discord.Client):
         if state['status'] == 'idle':
             state['count'] += 1
             dates = get_next_week_dates()
-            content = f"**【零式消化{state['count']}】今週の予定を確認します**\n"
+            content = f"@everyone\n**【零式消化{state['count']}】今週の予定を確認します**\n"
             content += "全員（8人）揃った日に自動決定します（21:00〜）\n\n"
             for i, d in enumerate(dates):
                 content += f"{EMOJIS[i]} : {d}\n"
@@ -80,7 +80,7 @@ class MyBot(discord.Client):
                 
                 if selected_index != -1:
                     confirmed_date = state['dates'][selected_index]
-                    announcement = f"**【日程確定】零式消化{state['count']}**\n"
+                    announcement = f"@everyone\n**【日程確定】零式消化{state['count']}**\n"
                     announcement += f"✅ **{confirmed_date} 21:00〜** に決定しました！\n"
                     announcement += "よろしくお願いします。"
                     await channel.send(announcement)
