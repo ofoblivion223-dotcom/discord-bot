@@ -22,11 +22,20 @@ class MyBot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
         
+# 1. 投稿先のチャンネルを特定
         channel = self.get_channel(CHANNEL_ID)
+        
         if not channel:
-            print("Channel not found.")
+            # IDで見つからない場合、参加しているサーバーから "general" という名前を探す
+            for guild in self.guilds:
+                channel = discord.utils.get(guild.text_channels, name="general")
+                if channel:
+                    break
+        if not channel:
+            print("Channel not found. (#generalも見つかりませんでした)")
             await self.close()
             return
+            
         with open(STATE_FILE, 'r', encoding='utf-8') as f:
             state = json.load(f)
         now = datetime.now()
