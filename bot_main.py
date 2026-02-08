@@ -28,22 +28,36 @@ class MyBot(discord.Client):
         print(f'Logged in as {self.user}')
         
         # --- 1. チャンネルの特定/作成 (最優先) ---
-        channel = self.get_channel(CHANNEL_ID)
+        channel = None
         is_new_channel = False
         
+        # CHANNEL_ID が設定されていれば、まずそれで探す
+        if CHANNEL_ID > 0:
+            channel = self.get_channel(CHANNEL_ID)
+            if channel:
+                print(f"Found channel by ID: #{channel.name}")
+        
+        # CHANNEL_ID が未設定または見つからない場合、チャンネル名で探す
         if not channel:
             for guild in self.guilds:
                 channel = discord.utils.get(guild.text_channels, name=TARGET_CHANNEL_NAME)
-                if not channel:
-                    try:
-                        channel = await guild.create_text_channel(TARGET_CHANNEL_NAME)
-                        print(f"Created new channel: #{TARGET_CHANNEL_NAME}")
-                        is_new_channel = True
-                    except: pass
-                if channel: break
-
+                if channel:
+                    print(f"Found channel by name in guild '{guild.name}': #{channel.name}")
+                    break
+        
+        # まだ見つからない場合、チャンネルを作成
         if not channel:
-            print("Channel not found.")
+            for guild in self.guilds:
+                try:
+                    channel = await guild.create_text_channel(TARGET_CHANNEL_NAME)
+                    print(f"Created new channel in guild '{guild.name}': #{TARGET_CHANNEL_NAME}")
+                    is_new_channel = True
+                    break
+                except Exception as e:
+                    print(f"Failed to create channel in guild '{guild.name}': {e}")
+        
+        if not channel:
+            print("Channel not found and could not be created.")
             await self.close()
             return
 
@@ -136,5 +150,5 @@ class MyBot(discord.Client):
         await self.close()
 
 if __name__ == "__main__":
-    client = MyBot(intents=discord.Intents.all())
+    client = MyBot(intents=discord.Intents.default())
     client.run(TOKEN)
