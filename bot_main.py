@@ -93,7 +93,7 @@ class MyBot(discord.Client):
                     reaction = discord.utils.get(message.reactions, emoji=emoji)
                     if reaction:
                         # テスト時はここを 1 に、本番は 8 にしてください
-                        if reaction.count - 1 >= 8:
+                        if reaction.count - 1 >= 1:
                             selected_index = i
                             break
                 
