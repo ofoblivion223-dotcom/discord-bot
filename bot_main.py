@@ -99,7 +99,7 @@ class MyBot(discord.Client):
             state['status'] = 'gathering'
             state['last_reminded_at'] = None
 
-        # B. 集計・催促
+        # B. 集計・催促 (月曜19時に1回だけ)
         elif state['status'] == 'gathering' and state['current_post_id']:
             try:
                 message = await channel.fetch_message(state['current_post_id'])
@@ -119,13 +119,14 @@ class MyBot(discord.Client):
                     state['status'] = 'idle'
                     state['current_post_id'] = None
                 
-                elif (weekday in [5, 6] and hour >= 21 and state.get('last_reminded_at') != now_jst.strftime("%Y-%m-%d")) or force_remind:
+                # 月曜日の19時に1回だけ催促を送信
+                elif weekday == 0 and 19 <= hour < 20 and (state.get('last_reminded_at') != now_jst.strftime("%Y-%m-%d") or force_remind):
                     top3 = sorted(scores, key=lambda x: x['count'], reverse=True)[:3]
                     users = "、".join(responded_users) if responded_users else "なし"
                     remind = f"@everyone **【週末確認】**\n✅ **入力済み**: {users}\n📊 **有力候補**:\n"
                     for s in top3: remind += f"- {s['date']} ({s['count']}人)\n"
                     await channel.send(remind)
-                    if not force_remind: state['last_reminded_at'] = now_jst.strftime("%Y-%m-%d")
+                    state['last_reminded_at'] = now_jst.strftime("%Y-%m-%d")
             except:
                 state['status'] = 'idle'
 
