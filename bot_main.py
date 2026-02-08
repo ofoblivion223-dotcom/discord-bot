@@ -74,7 +74,7 @@ class MyBot(discord.Client):
                     reaction = discord.utils.get(message.reactions, emoji=emoji)
                     if reaction:
                         # Bot自身のリアクションを除いて 8人以上
-                        if reaction.count - 1 >= 8:
+                        if reaction.count - 1 >= 1:
                             selected_index = i
                             break # 最初に見つかった（早い日程）で決定
                 
