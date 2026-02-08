@@ -1,8 +1,8 @@
 {
     "count": 7,
-    "current_post_id": 1469893329645863074,
-    "status": "gathering",
-    "confirmed_date": null,
+    "current_post_id": null,
+    "status": "idle",
+    "confirmed_date": "02/10(火)",
     "dates": [
         "02/10(火)",
         "02/11(水)",
