@@ -9,15 +9,22 @@ CHANNEL_ID = int(os.getenv('DISCORD_CHANNEL_ID')) if os.getenv('DISCORD_CHANNEL_
 STATE_FILE = 'state.json'
 EMOJIS = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬"]
 def get_next_week_dates():
-    # 今日（実行日＝日曜想定）を基準に、翌火曜〜月曜の日程を生成
-    # 0=月, 6=日
+    # 今日（実行日）を基準に、一番近い「次の火曜日」を計算する
     today = datetime.now()
-    start_date = today + timedelta(days=(1 - today.weekday() + 7) % 7 + 1) # 翌火曜
+    # 0=月, 1=火, 2=水, ... 6=日
+    # 次の火曜日までの日数を計算
+    days_until_tuesday = (1 - today.weekday() + 7) % 7
+    
+    # もし今日が火曜日なら、来週の火曜日にしたい場合は timedelta(days=7) を足す
+    # 基本的には日曜に動く想定なので、そのまま足せば火曜になります
+    next_tuesday = today + timedelta(days=days_until_tuesday)
+    
     dates = []
     for i in range(7):
-        current = start_date + timedelta(days=i)
+        current = next_tuesday + timedelta(days=i)
         dates.append(current.strftime("%m/%d") + "(" + ["月","火","水","木","金","土","日"][current.weekday()] + ")")
     return dates
+
 class MyBot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
