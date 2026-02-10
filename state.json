@@ -12,6 +12,6 @@
         "02/15(日)",
         "02/16(月)"
     ],
-    "welcomed": falase,
+    "welcomed": false,
     "last_reminded_at": null
 }
