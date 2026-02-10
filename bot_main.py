@@ -106,8 +106,8 @@ class MyBot(discord.Client):
                         async for user in reaction.users():
                             if user.id != self.user.id: responded_users.add(user.display_name)
                     scores.append({"date": state['dates'][i], "count": count})
-                # 自分以外の7人（全員）が揃ったら決定
-                winner = next((s for s in scores if s['count'] >= 7), None)
+                # 8人（自分以外全員）が揃ったら決定
+                winner = next((s for s in scores if s['count'] >= 8), None)
                 if winner:
                     await channel.send(f"@everyone\n**【日程確定】**\n✅ **{winner['date']} 21:00〜** に決定しました！")
                     state['status'] = 'idle'
@@ -124,7 +124,6 @@ class MyBot(discord.Client):
                         state['last_reminded_at'] = now_jst.strftime("%Y-%m-%d")
             except Exception as e:
                 print(f"Error in gathering: {e}")
-                # メッセージが見つからないなどの場合はリセット
                 if "404" in str(e): state['status'] = 'idle'
         # 保存
         with open(STATE_FILE, 'w', encoding='utf-8') as f:
