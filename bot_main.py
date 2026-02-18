@@ -105,10 +105,11 @@ class MyBot(discord.Client):
         hour = now_jst.hour
         current_week = now_jst.isocalendar()[1]
 
-        # A. 募集開始 (金曜21時以降 かつ 今週まだ募集していない場合)
+        # A. 募集開始
+        # 条件: 金曜21時以降かつ今週まだ募集していない場合（gathering残存時も上書き）、または !post 強制実行
         is_scheduled_start = (weekday == 4 and hour >= 21 and state.get('last_recruited_week') != current_week)
         
-        if (state['status'] == 'idle' and is_scheduled_start) or force_post:
+        if is_scheduled_start or force_post:
             state['dates'] = get_next_week_dates()
             content = f"@everyone\n**【零式消化】今週の予定を確認します**\n"
             content += "全員（8人）揃った日に自動決定します（21:00〜）\n\n"
