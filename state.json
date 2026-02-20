@@ -1,17 +1,18 @@
 {
     "count": 7,
-    "current_post_id": 1471875714532901089,
+    "current_post_id": 1474411507784749149,
     "status": "gathering",
     "confirmed_date": "02/10(火)",
     "dates": [
-        "02/17(火)",
-        "02/18(水)",
-        "02/19(木)",
-        "02/20(金)",
-        "02/21(土)",
-        "02/22(日)",
-        "02/23(月)"
+        "02/24(火)",
+        "02/25(水)",
+        "02/26(木)",
+        "02/27(金)",
+        "02/28(土)",
+        "03/01(日)",
+        "03/02(月)"
     ],
     "welcomed": true,
-    "last_reminded_at": null
+    "last_reminded_at": null,
+    "last_recruited_week": 8
 }
