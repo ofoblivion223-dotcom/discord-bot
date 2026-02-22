@@ -1,6 +1,7 @@
 import discord
 import os
 import json
+import random
 from datetime import datetime, timedelta, timezone
 
 # 設定
@@ -11,6 +12,33 @@ STATE_FILE = 'state.json'
 TARGET_CHANNEL_NAME = "零式消化日程"
 EMOJIS = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬"]
 JST = timezone(timedelta(hours=9))
+
+# リマインドメッセージのバリエーション
+MESSAGES_DAY_BEFORE = [
+    "**【準備推奨】** 明日 **{date} 21:00〜** 消化です！最新のご飯と薬の在庫チェックを忘れずに。鞄の空きも確保しておきましょう！",
+    "**【マクロ確認】** 明日 **{date}** はレイド日です。散開図、脳内シミュレーションできていますか？イメトレを制する者が消化を制します。",
+    "**【装備点検】** 冒険者ギルドからのお知らせ：明日 **{date} 21:00** より作戦開始。ダークマターの用意は十分ですか？壊れた装備で挑むのは禁物です。",
+    "**【体調管理】** 明日は **{date} 21:00** から本番。今日は早めにログアウトして「休息（レストボーナス）」をしっかり取ってくださいね。",
+    "**【生存戦略】** 予習復習はお済みですか？明日 **{date}**、死なないことが最大のDPS貢献です。ギミック確認をもう一度！",
+    "**【気合注入】** 輝ける勝利のために。明日 **{date} 21:00**、戦いの火蓋が切られます。全力で振り抜く準備をしておいてください。",
+    "**【最終通告】** 明日は **{date}**。予定の重複はありませんか？エオルゼアの平和（と装備の獲得）のために集結をお願いします。",
+    "**【ロット運祈願】** 明日 **{date} 21:00〜**！ロットで「99」を出す準備はできていますか？徳を積んで待ちましょう。",
+    "**【忘れ物チェック】** 飯？ヨシ。薬？ヨシ。マクロ？ヨシ。明日 **{date} 21:00**、現地（またはVC）でお会いしましょう。",
+    "**【予兆検知】** 私のセンサーが明日の勝利を予兆しています。**{date} 21:00**、最高のチームワークで駆け抜けましょう！"
+]
+
+MESSAGES_DAY_OF = [
+    "**【1時間前】** コンテンツ開始まであと1時間。**今夜 21:00〜** です！ログインと修理、エモートの準備も万全に！",
+    "**【シャキ待ち準備】** 本日の消化開始まであと60分。**21:00** には「シャキーン！」と開始できるよう、早めのログインを！",
+    "**【食事効果】** あと1時間！今夜のメニュー（食事）は決めましたか？HQ品を食べてステータスを底上げしておきましょう。",
+    "**【最終チェック】** 21:00までカウントダウン。ジョブチェンジ、アクション配置、心構え、すべて整っていますか？",
+    "**【戦士の休息】** あと1時間で戦闘開始。今のうちにリアルでの用事（お風呂・夕食）を済ませて、集中モードへ！",
+    "**【ロット神の加護】** 今夜 **21:00〜**！箱の中身はあなたのもの（かもしれません）。1時間後、戦場でお会いしましょう。",
+    "**【接続確認】** ネット回線の調子はどうですか？ラグは最大の敵です。あと1時間、環境を整えてお待ちください。",
+    "**【マクロ流します】** 1時間後に開始します！「あ、あのギミックなんだっけ？」と思ったら今のうちに動画をチラ見！",
+    "**【勝利の予感】** さあ、消化の時間だ。あと1時間でゲートが開きます。最高のパフォーマンスを期待しています！",
+    "**【全集中】** あと60分。今夜の消化はサクッと終わらせて、みんなで勝利の余韻に浸りましょう。21:00集合です！"
+]
 
 def get_now_jst():
     return datetime.now(timezone.utc).astimezone(JST)
@@ -183,12 +211,14 @@ class MyBot(discord.Client):
 
                 # 【前日リマインド】前日 21時
                 elif now_jst.date() == (confirmed_dt - timedelta(days=1)).date() and hour == 21 and not state.get('reminded_day_before'):
-                    await channel.send(f"@everyone 📣 **【前日お知らせ】**\n明日 **{state['confirmed_date']} 21:00～** です！準備を忘れずに👊")
+                    msg_template = random.choice(MESSAGES_DAY_BEFORE)
+                    await channel.send(f"@everyone {msg_template.format(date=state['confirmed_date'])}")
                     state['reminded_day_before'] = True
 
                 # 【当日リマインド】当日 20時
                 elif now_jst.date() == confirmed_dt.date() and hour == 20 and not state.get('reminded_day_of'):
-                    await channel.send(f"@everyone ⏰ **【当日お知らせ】**\n**今夜 {state['confirmed_date']} 21:00～** まであと 1時間！接続確認をおねがいします👋")
+                    msg_template = random.choice(MESSAGES_DAY_OF)
+                    await channel.send(f"@everyone {msg_template}")
                     state['reminded_day_of'] = True
 
             except Exception as e:
