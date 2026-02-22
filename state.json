@@ -1,8 +1,8 @@
 {
     "count": 7,
     "current_post_id": null,
-    "status": "idle",
-    "confirmed_date": "02/10(火)",
+    "status": "confirmed",
+    "confirmed_date": "02/24(火)",
     "dates": [
         "02/24(火)",
         "02/25(水)",
@@ -14,5 +14,7 @@
     ],
     "welcomed": true,
     "last_reminded_at": null,
-    "last_recruited_week": 8
+    "last_recruited_week": 8,
+    "reminded_day_before": false,
+    "reminded_day_of": false
 }
