@@ -144,12 +144,15 @@ class MyBot(discord.Client):
                     
                     scores.append({"date": state['dates'][i], "count": len(u_list)})
 
-                # 8人揃ったら決定
+                # 8人揃ったら確定
                 winner = next((s for s in scores if s['count'] >= 8), None)
                 if winner:
-                    await channel.send(f"@everyone\n**【日程確定】**\n✅ **{winner['date']} 21:00〜** に決定しました！")
-                    state['status'] = 'idle'
+                    await channel.send(f"@everyone\n**【日程確定】**\n✅ **{winner['date']} 21:00～** に決定しました！")
+                    state['status'] = 'confirmed'
                     state['current_post_id'] = None
+                    state['confirmed_date'] = winner['date']  # 例: "02/24(火)"
+                    state['reminded_day_before'] = False
+                    state['reminded_day_of'] = False
                 
                 # 催促判定 (月曜19時 または 強制実行)
                 else:
@@ -164,6 +167,32 @@ class MyBot(discord.Client):
             except Exception as e:
                 print(f"Error: {e}")
                 if "404" in str(e): state['status'] = 'idle' # メッセージ削除済み時
+
+        # C. 構成入り楽曲 確定日のリマインド
+        elif state['status'] == 'confirmed' and state.get('confirmed_date'):
+            try:
+                # "02/24(火)" → 日付オブジェクトに変換
+                date_str = state['confirmed_date'].split('(')[0]  # "02/24"
+                current_year = now_jst.year
+                confirmed_dt = datetime.strptime(f"{current_year}/{date_str}", "%Y/%m/%d").replace(tzinfo=JST)
+
+                # 【業務終了】本番翻日の翻日以降 → idleへ戻す
+                if now_jst >= confirmed_dt + timedelta(days=1):
+                    state['status'] = 'idle'
+                    state['confirmed_date'] = None
+
+                # 【前日リマインド】前日 21時
+                elif now_jst.date() == (confirmed_dt - timedelta(days=1)).date() and hour == 21 and not state.get('reminded_day_before'):
+                    await channel.send(f"@everyone 📣 **【前日お知らせ】**\n明日 **{state['confirmed_date']} 21:00～** です！準備を忘れずに👊")
+                    state['reminded_day_before'] = True
+
+                # 【当日リマインド】当日 20時
+                elif now_jst.date() == confirmed_dt.date() and hour == 20 and not state.get('reminded_day_of'):
+                    await channel.send(f"@everyone ⏰ **【当日お知らせ】**\n**今夜 {state['confirmed_date']} 21:00～** まであと 1時間！接続確認をおねがいします👋")
+                    state['reminded_day_of'] = True
+
+            except Exception as e:
+                print(f"Reminder error: {e}")
 
         # 状態保存
         with open(STATE_FILE, 'w', encoding='utf-8') as f:
