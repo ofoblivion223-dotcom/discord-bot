@@ -209,14 +209,14 @@ class MyBot(discord.Client):
                     state['status'] = 'idle'
                     state['confirmed_date'] = None
 
-                # 【前日リマインド】前日 21時
-                elif now_jst.date() == (confirmed_dt - timedelta(days=1)).date() and hour == 21 and not state.get('reminded_day_before'):
+                # 【前日リマインド】前日 21時以降
+                elif now_jst.date() == (confirmed_dt - timedelta(days=1)).date() and (hour >= 21 or force_remind) and not state.get('reminded_day_before'):
                     msg_template = random.choice(MESSAGES_DAY_BEFORE)
                     await channel.send(f"@everyone {msg_template.format(date=state['confirmed_date'])}")
                     state['reminded_day_before'] = True
 
-                # 【当日リマインド】当日 20時
-                elif now_jst.date() == confirmed_dt.date() and hour == 20 and not state.get('reminded_day_of'):
+                # 【当日リマインド】当日 20時以降
+                elif now_jst.date() == confirmed_dt.date() and (hour >= 20 or force_remind) and not state.get('reminded_day_of'):
                     msg_template = random.choice(MESSAGES_DAY_OF)
                     await channel.send(f"@everyone {msg_template}")
                     state['reminded_day_of'] = True
