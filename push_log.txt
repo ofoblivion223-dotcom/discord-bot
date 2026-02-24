@@ -1,0 +1,13 @@
+﻿git : To https://github.com/ofoblivion223-dotcom/discord-bot.git
+発生場所 行:1 文字:71
++ ...  "Add post-confirmation reminders"; git push origin main *>&1 | Out-F ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...discord-bot.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/ofoblivion223-dotcom/discord-bot.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.

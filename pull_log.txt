@@ -1,0 +1,11 @@
+﻿git : From https://github.com/ofoblivion223-dotcom/discord-bot
+発生場所 行:1 文字:1
++ git pull --rebase origin main 2>&1 | Out-File pull_log.txt -Encoding  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (From https://gi...com/discord-bot:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ * branch            main       -> FETCH_HEAD
+Rebasing (1/2)
+Rebasing (2/2)
+Successfully rebased and updated refs/heads/main.

@@ -1,0 +1,8 @@
+﻿git : To https://github.com/ofoblivion223-dotcom/discord-bot.git
+発生場所 C:\Users\owner\.gemini\antigravity\playground\axial-void\repo_new\push_final.ps1:7 文字:1
++ git push origin main 2>&1 | Out-File push_final_log.txt -Encoding utf ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...discord-bot.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   6839537..558681b  main -> main

@@ -1,0 +1,7 @@
+﻿git : Everything up-to-date
+発生場所 C:\Users\owner\.gemini\antigravity\playground\axial-void\repo_new\push_state.ps1:7 文字:1
++ git push origin main 2>&1 | Out-File push_state_log.txt -Encoding utf ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Everything up-to-date:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

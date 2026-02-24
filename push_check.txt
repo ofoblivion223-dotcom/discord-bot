@@ -1,0 +1,5 @@
+﻿21eecd9 Add 20 message variations for reminders and randomize selection
+60ece7a Manual fix: set status to confirmed for 02/24(霓｣・ｫ) to enable reminders
+9cc0e89 Test commit
+75ee813 Add post-confirmation reminders: day-before at 21:00, day-of at 20:00
+112cc02 Update state

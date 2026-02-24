@@ -1,0 +1,81 @@
+﻿commit 112cc029d663fe2a6eaeb4137c60e497f9ca6f72
+Author: GitHub Action <action@github.com>
+Date:   Sun Feb 22 10:55:10 2026 +0000
+
+    Update state
+
+diff --git a/state.json b/state.json
+index 9457ff4..7877dec 100644
+--- a/state.json
++++ b/state.json
+@@ -1,7 +1,7 @@
+ {
+     "count": 7,
+-    "current_post_id": 1474411507784749149,
+-    "status": "gathering",
++    "current_post_id": null,
++    "status": "idle",
+     "confirmed_date": "02/10(轣ｫ)",
+     "dates": [
+         "02/24(轣ｫ)",
+
+commit 7f692538b8a032598e1e0fed6eadd55ad0ed090a
+Author: GitHub Action <action@github.com>
+Date:   Fri Feb 20 14:24:59 2026 +0000
+
+    Update state
+
+diff --git a/state.json b/state.json
+index 3f72085..9457ff4 100644
+--- a/state.json
++++ b/state.json
+@@ -1,17 +1,18 @@
+ {
+     "count": 7,
+-    "current_post_id": 1471875714532901089,
++    "current_post_id": 1474411507784749149,
+     "status": "gathering",
+     "confirmed_date": "02/10(轣ｫ)",
+     "dates": [
+-        "02/17(轣ｫ)",
+-        "02/18(豌ｴ)",
+-        "02/19(譛ｨ)",
+-        "02/20(驥・",
+-        "02/21(蝨・",
+-        "02/22(譌･)",
+-        "02/23(譛・"
++        "02/24(轣ｫ)",
++        "02/25(豌ｴ)",
++        "02/26(譛ｨ)",
++        "02/27(驥・",
++        "02/28(蝨・",
++        "03/01(譌･)",
++        "03/02(譛・"
+     ],
+     "welcomed": true,
+-    "last_reminded_at": null
++    "last_reminded_at": null,
++    "last_recruited_week": 8
+ }
+\ No newline at end of file
+
+commit 624c345042a62a7e61790da55912bc0957085924
+Author: GitHub Action <action@github.com>
+Date:   Fri Feb 13 14:28:39 2026 +0000
+
+    Update state
+
+diff --git a/state.json b/state.json
+index a2b3fb0..3f72085 100644
+--- a/state.json
++++ b/state.json
+@@ -1,7 +1,7 @@
+ {
+     "count": 7,
+-    "current_post_id": null,
+-    "status": "idle",
++    "current_post_id": 1471875714532901089,
++    "status": "gathering",
+     "confirmed_date": "02/10(轣ｫ)",
+     "dates": [
+         "02/17(轣ｫ)",

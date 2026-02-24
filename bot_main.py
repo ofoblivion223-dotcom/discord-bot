@@ -109,6 +109,7 @@ class MyBot(discord.Client):
         # --- 4. コマンド確認 (精度の向上) ---
         force_post = False
         force_remind = False
+        force_cancel = False
         async for msg in channel.history(limit=30):
             if msg.author.bot: continue
             
@@ -127,6 +128,11 @@ class MyBot(discord.Client):
                 force_remind = True
                 try: await msg.delete()
                 except: pass
+            elif content == "!cancel":
+                if state['status'] == 'confirmed':
+                    force_cancel = True
+                try: await msg.delete()
+                except: pass
 
         # --- 5. メインロジック ---
         weekday = now_jst.weekday()
@@ -137,8 +143,13 @@ class MyBot(discord.Client):
         # 条件: 金曜21時以降かつ今週まだ募集していない場合（gathering残存時も上書き）、または !post 強制実行
         is_scheduled_start = (weekday == 4 and hour >= 21 and state.get('last_recruited_week') != current_week)
         
-        if is_scheduled_start or force_post:
-            state['dates'] = get_next_week_dates()
+        if is_scheduled_start or force_post or force_cancel:
+            if force_cancel:
+                state['dates'] = get_next_week_dates()
+                await channel.send("@everyone\n**【日程再調整】** 急用等により日程をキャンセルしました。再度候補日を選択してください。")
+            else:
+                state['dates'] = get_next_week_dates()
+            
             content = f"@everyone\n**【零式消化】今週の予定を確認します**\n"
             content += "全員（8人）揃った日に自動決定します（21:00〜）\n\n"
             for i, d in enumerate(state['dates']):
@@ -150,7 +161,9 @@ class MyBot(discord.Client):
             state['current_post_id'] = message.id
             state['status'] = 'gathering'
             state['last_reminded_at'] = None
-            state['last_recruited_week'] = current_week
+            state['confirmed_date'] = None
+            if not force_cancel:
+                state['last_recruited_week'] = current_week
 
         # B. 集計・催促
         elif state['status'] == 'gathering' and state['current_post_id']:
@@ -175,7 +188,16 @@ class MyBot(discord.Client):
                 # 8人揃ったら確定
                 winner = next((s for s in scores if s['count'] >= 8), None)
                 if winner:
-                    await channel.send(f"@everyone\n**【日程確定】**\n✅ **{winner['date']} 21:00～** に決定しました！")
+                    top3 = sorted(scores, key=lambda x: x['count'], reverse=True)[:3]
+                    msg = f"@everyone\n**【日程確定】**\n✅ **{winner['date']} 21:00～** に決定しました！\n\n"
+                    msg += "📊 **上位3候補:**\n"
+                    rank_labels = ["🥇", "🥈", "🥉"]
+                    for i, s in enumerate(top3[:3]):
+                        label = "← 確定" if s['date'] == winner['date'] else ""
+                        msg += f"{rank_labels[i]} {s['date']} ({s['count']}人) {label}\n"
+                    msg += "\n急用等で不可になった場合は `!cancel` と打てば再調整します。"
+                    
+                    await channel.send(msg)
                     state['status'] = 'confirmed'
                     state['current_post_id'] = None
                     state['confirmed_date'] = winner['date']  # 例: "02/24(火)"
