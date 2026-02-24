@@ -16,5 +16,5 @@
     "last_reminded_at": null,
     "last_recruited_week": 8,
     "reminded_day_before": false,
-    "reminded_day_of": false
+    "reminded_day_of": true
 }
