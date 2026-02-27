@@ -1,20 +1,20 @@
 {
     "count": 7,
-    "current_post_id": null,
-    "status": "idle",
+    "current_post_id": 1476944542912741567,
+    "status": "gathering",
     "confirmed_date": null,
     "dates": [
-        "02/24(火)",
-        "02/25(水)",
-        "02/26(木)",
-        "02/27(金)",
-        "02/28(土)",
-        "03/01(日)",
-        "03/02(月)"
+        "03/03(火)",
+        "03/04(水)",
+        "03/05(木)",
+        "03/06(金)",
+        "03/07(土)",
+        "03/08(日)",
+        "03/09(月)"
     ],
     "welcomed": true,
     "last_reminded_at": null,
-    "last_recruited_week": 8,
+    "last_recruited_week": 9,
     "reminded_day_before": false,
     "reminded_day_of": true
 }
