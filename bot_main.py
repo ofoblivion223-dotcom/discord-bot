@@ -206,7 +206,7 @@ class MyBot(discord.Client):
                 
                 # 催促判定 (月曜19時 または 強制実行)
                 else:
-                    is_remind_time = (weekday == 0 and 19 <= hour < 20 and state.get('last_reminded_at') != now_jst.strftime("%Y-%m-%d"))
+                    is_remind_time = (weekday == 0 and hour >= 12 and state.get('last_reminded_at') != now_jst.strftime("%Y-%m-%d"))
                     if is_remind_time or force_remind:
                         top3 = sorted(scores, key=lambda x: x['count'], reverse=True)[:3]
                         u_names = "、".join(responded_users) if responded_users else "なし"
